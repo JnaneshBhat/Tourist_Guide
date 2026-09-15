@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mangaluru — A Traveller's Guide to the Coast</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#12262A;
+    --ink-soft:#3E5457;
+    --paper:#EEF1E6;
+    --paper-deep:#E3E7D6;
+    --card:#FFFFFF;
+    --sea:#0E5C68;
+    --sea-deep:#083840;
+    --sea-bright:#1E86A0;
+    --tile:#B1502A;
+    --gold:#B8902A;
+    --line: rgba(18,38,42,0.12);
+    --shadow: 0 1px 2px rgba(18,38,42,0.06), 0 8px 24px rgba(18,38,42,0.08);
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  a{color:inherit;}
+  img{max-width:100%;display:block;}
+  button{font-family:inherit;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background:
+      radial-gradient(120% 140% at 15% -10%, #124d57 0%, var(--sea) 38%, var(--sea-deep) 100%);
+    color:#F4F6EF;
+    padding:64px 24px 0;
+    overflow:hidden;
+  }
+  .hero-inner{
+    max-width:1120px;
+    margin:0 auto;
+    position:relative;
+    z-index:2;
+  }
+  .hero-eyebrow{
+    font-size:14px;
+    color:#BFDDE0;
+    max-width:520px;
+    line-height:1.5;
+    margin-bottom:22px;
+  }
+  .hero h1{
+    font-size:clamp(48px,9vw,104px);
+    line-height:0.92;
+    color:#FBFAF4;
+  }
+  .hero h1 em{
+    font-style:italic;
+    color:#7FD6C6;
+  }
+  .hero-sub{
+    margin-top:22px;
+    max-width:540px;
+    font-size:17px;
+    line-height:1.6;
+    color:#D9E6E2;
+  }
+  .hero-stats{
+    display:flex;
+    gap:36px;
+    margin-top:40px;
+    flex-wrap:wrap;
+  }
+  .stat b{
+    display:block;
+    font-family:'Fraunces',serif;
+    font-size:32px;
+    font-weight:600;
+    color:#FBFAF4;
+  }
+  .stat span{
+    font-size:13px;
+    color:#A9C7C5;
+  }
+  .hero-search{
+    margin-top:40px;
+    max-width:560px;
+    display:flex;
+    gap:0;
+    background:rgba(251,250,244,0.08);
+    border:1px solid rgba(251,250,244,0.28);
+    border-radius:999px;
+    padding:6px 6px 6px 22px;
+    align-items:center;
+  }
+  .hero-search input{
+    flex:1;
+    background:transparent;
+    border:none;
+    outline:none;
+    color:#FBFAF4;
+    font-size:15px;
+    font-family:'Inter',sans-serif;
+    padding:12px 8px;
+  }
+  .hero-search input::placeholder{color:#9CC1BE;}
+  .hero-search button{
+    background:#F4B93C;
+    color:#2A1C05;
+    border:none;
+    border-radius:999px;
+    padding:12px 22px;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .tide{
+    display:block;
+    width:100%;
+    height:64px;
+    margin-top:56px;
+  }
+
+  /* ---------- FILTER BAR ---------- */
+  .filterbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:14px 24px;
+  }
+  .filterbar-inner{
+    max-width:1120px;
+    margin:0 auto;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    align-items:center;
+  }
+  .pill{
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--ink-soft);
+    padding:9px 16px;
+    border-radius:999px;
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:7px;
+    transition:background .15s, color .15s, border-color .15s;
+  }
+  .pill .dot{width:8px;height:8px;border-radius:50%;flex:none;}
+  .pill.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:#fff;
+  }
+  .pill-count{
+    margin-left:auto;
+    font-size:13px;
+    color:var(--ink-soft);
+    padding-left:8px;
+  }
+
+  /* ---------- GRID ---------- */
+  main{max-width:1120px;margin:0 auto;padding:40px 24px 100px;}
+  .section-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin:44px 0 20px;
+  }
+  .section-head h2{font-size:26px;}
+  .section-head span{font-size:13px;color:var(--ink-soft);}
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(268px,1fr));
+    gap:20px;
+  }
+  .card{
+    background:var(--card);
+    border-radius:var(--radius);
+    overflow:hidden;
+    box-shadow:var(--shadow);
+    border:1px solid var(--line);
+    cursor:pointer;
+    display:flex;
+    flex-direction:column;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 4px 10px rgba(18,38,42,.08), 0 16px 32px rgba(18,38,42,.12);
+  }
+  .card-media{
+    position:relative;
+    aspect-ratio:4/3;
+    background:linear-gradient(135deg,var(--ph1),var(--ph2));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .card-media img{
+    width:100%;height:100%;object-fit:cover;
+    opacity:0;transition:opacity .5s ease;
+    position:absolute;inset:0;
+  }
+  .card-media img.loaded{opacity:1;}
+  .ph-mono{
+    font-family:'Fraunces',serif;
+    font-size:44px;
+    color:rgba(255,255,255,0.85);
+    z-index:1;
+  }
+  .ph-icon{
+    position:absolute;
+    bottom:10px;
+    left:10px;
+    font-size:13px;
+    background:rgba(0,0,0,0.28);
+    color:#fff;
+    padding:4px 9px;
+    border-radius:999px;
+    z-index:1;
+    backdrop-filter:blur(2px);
+  }
+  .card-body{padding:16px 16px 18px;display:flex;flex-direction:column;gap:6px;flex:1;}
+  .card-tag{
+    font-size:11.5px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--cat-color);
+  }
+  .card-body h3{font-size:18px;line-height:1.25;}
+  .card-area{font-size:12.5px;color:var(--ink-soft);}
+  .card-desc{font-size:13.5px;color:var(--ink-soft);line-height:1.5;margin-top:2px;flex:1;}
+  .card-cta{
+    margin-top:10px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--sea);
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+
+  .empty{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--ink-soft);
+  }
+
+  /* ---------- MODAL ---------- */
+  .overlay{
+    position:fixed;inset:0;
+    background:rgba(8,20,22,0.55);
+    backdrop-filter:blur(3px);
+    display:none;
+    align-items:flex-start;
+    justify-content:center;
+    padding:40px 16px;
+    overflow-y:auto;
+    z-index:100;
+  }
+  .overlay.open{display:flex;}
+  .modal{
+    background:var(--card);
+    max-width:760px;
+    width:100%;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,0.35);
+    animation:pop .22s ease;
+  }
+  @keyframes pop{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+  .modal-media{
+    position:relative;
+    aspect-ratio:16/8;
+    background:linear-gradient(135deg,var(--ph1),var(--ph2));
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .modal-media img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:0;transition:opacity .5s;}
+  .modal-media img.loaded{opacity:1;}
+  .modal-close{
+    position:absolute;top:14px;right:14px;z-index:5;
+    width:34px;height:34px;border-radius:50%;
+    background:rgba(8,20,22,0.55);color:#fff;border:none;
+    font-size:18px;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .modal-tag{
+    position:absolute;top:14px;left:14px;z-index:5;
+    font-size:11.5px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+    background:rgba(8,20,22,0.55);color:#fff;padding:6px 12px;border-radius:999px;
+  }
+  .modal-body{padding:26px 28px 30px;}
+  .modal-body h2{font-size:28px;margin-bottom:4px;}
+  .modal-area{font-size:13.5px;color:var(--ink-soft);margin-bottom:14px;}
+  .modal-desc{font-size:15px;line-height:1.65;color:#2C4245;}
+  .modal-map{
+    margin-top:20px;
+    border-radius:12px;
+    overflow:hidden;
+    border:1px solid var(--line);
+    height:260px;
+  }
+  .modal-map iframe{width:100%;height:100%;border:0;}
+  .modal-actions{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 18px;border-radius:999px;
+    font-size:13.5px;font-weight:600;text-decoration:none;
+    border:1px solid var(--line);
+    cursor:pointer;
+  }
+  .btn-primary{background:var(--sea);color:#fff;border-color:var(--sea);}
+  .btn-ghost{background:transparent;color:var(--ink);}
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:34px 24px 50px;
+    text-align:center;
+    color:var(--ink-soft);
+    font-size:13px;
+  }
+  footer b{color:var(--ink);}
+
+  @media (max-width:640px){
+    .hero{padding:44px 18px 0;}
+    .hero-stats{gap:24px;}
+    main{padding:28px 16px 80px;}
+    .filterbar{padding:12px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">A COASTAL GUIDE — KARNATAKA, INDIA</div>
+    <h1>Manga<em>luru</em>,<br>slowly.</h1>
+    <p class="hero-sub">Tiled roofs, temple gold, and the Arabian Sea at the door. Every beach, shrine, chapel and hillside worth the detour — in one place, mapped and ready.</p>
+    <div class="hero-stats">
+      <div class="stat"><b id="statTotal">0</b><span>places catalogued</span></div>
+      <div class="stat"><b id="statCat">0</b><span>categories</span></div>
+      <div class="stat"><b>1</b><span>coastline, endlessly good</span></div>
+    </div>
+    <div class="hero-search">
+      <input id="heroSearch" type="text" placeholder="Search a beach, temple, church…">
+      <button onclick="document.getElementById('grid').scrollIntoView({behavior:'smooth'})">Explore</button>
+    </div>
+  </div>
+  <svg class="tide" viewBox="0 0 1200 80" preserveAspectRatio="none">
+    <path d="M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,80 L0,80 Z" fill="#EEF1E6"></path>
+  </svg>
+</header>
+
+<nav class="filterbar" id="filterbar">
+  <div class="filterbar-inner" id="filterPills"></div>
+</nav>
+
+<main>
+  <div class="grid" id="grid"></div>
+  <div class="empty" id="emptyState" style="display:none;">No places match your search. Try a different word or category.</div>
+</main>
+
+<footer>
+  Built as an open travel reference for <b>Mangaluru</b>. Photos load live from Wikimedia where available; map pins open directly in Google Maps.
+</footer>
+
+<div class="overlay" id="overlay" onclick="if(event.target===this) closeModal()">
+  <div class="modal" id="modalBox"></div>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+/* c = category key, a = locality / how far, d = description, w = Wikipedia title for a live photo (null if none) */
+const CATS = {
+  beach:      {label:"Beaches",            color:"#1478A0", icon:"🏖️"},
+  temple:     {label:"Temples",            color:"#B8902A", icon:"🛕"},
+  church:     {label:"Churches & Chapels", color:"#5B7B8C", icon:"⛪"},
+  mosque:     {label:"Mosques & Dargahs",  color:"#2E8B74", icon:"🕌"},
+  nature:     {label:"Parks & Nature",     color:"#3F6E4E", icon:"🌳"},
+  heritage:   {label:"Heritage & Landmarks",color:"#B1502A", icon:"🏛️"},
+  excursion:  {label:"Day Trips Nearby",   color:"#8A5A3B", icon:"🧭"},
+};
+
+const PLACES = [
+// ---------------- BEACHES ----------------
+{n:"Panambur Beach", c:"beach", a:"Near New Mangalore Port", d:"The city's best-known beach — wide grey sand, jet-skiing and camel rides, and the biennial international kite festival. Busiest at sunset.", w:"Panambur Beach"},
+{n:"Tannirbhavi Beach", c:"beach", a:"Across the Gurupura river, west Mangalore", d:"A quieter alternative to Panambur, reached by a short ferry or road loop, with a long casuarina-backed shoreline good for evening walks.", w:"Tannirbhavi"},
+{n:"Someshwara Beach", c:"beach", a:"Ullal, south of the city", d:"Known for the Rudra Shile rock formations that break the surf line and a temple perched right above the shore — a favourite with photographers at dusk.", w:null},
+{n:"Ullal Beach", c:"beach", a:"Ullal town, south Mangalore", d:"A working fishing-village beach with palm groves and a laid-back, local feel, historically linked to the warrior queen Rani Abbakka.", w:null},
+{n:"Sasihithlu Beach", c:"beach", a:"North of Mangalore, at the Nandini–Shambhavi confluence", d:"Where two rivers meet the sea — calmer water, fewer crowds, and popular with anglers early in the morning.", w:null},
+{n:"Surathkal Beach", c:"beach", a:"Near NITK campus", d:"A rocky, dramatic stretch by the Surathkal lighthouse, framed by the NITK campus greenery — a favourite student sunset spot.", w:"Surathkal"},
+{n:"NITK Beach", c:"beach", a:"Inside NITK Surathkal campus", d:"A sheltered cove within the engineering institute's campus, backed by casuarina trees — open to visitors and easy to combine with Surathkal.", w:null},
+{n:"Batapady Beach", c:"beach", a:"North of Mulki", d:"An unhurried, mostly-empty beach north of the city, backed by cashew groves — bring your own shade.", w:null},
+{n:"Kotekar Beach", c:"beach", a:"South of Mangalore, near Someshwara", d:"A small rocky beach close to Someshwara, better for a quiet walk than a swim.", w:null},
+{n:"Chitrapu Beach", c:"beach", a:"North Mangalore, near Sasihithlu", d:"A little-visited fishing beach worth combining with Sasihithlu on a coastal drive.", w:null},
+{n:"Uchila Beach", c:"beach", a:"Between Mangalore and Udupi", d:"A midway stop on the coastal highway, with a long flat shore that empties out fast after the fishing boats return.", w:null},
+{n:"Bengre Beach", c:"beach", a:"Sandbar near the old port", d:"A narrow sandbar where the Gurupura and Netravathi rivers meet the sea — an unusual, almost otherworldly stretch to walk.", w:null},
+{n:"Mukka Beach", c:"beach", a:"Near Surathkal", d:"A compact, rocky beach close to the thermal power station, quieter than the bigger city beaches.", w:null},
+
+// ---------------- TEMPLES ----------------
+{n:"Kadri Manjunatha Temple", c:"temple", a:"Kadri Hills, city centre", d:"One of the region's oldest Shiva temples, in Vijayanagara-style architecture at the base of forested hills, with bronze images and adjoining rock-cut caves.", w:"Kadri Manjunath Temple"},
+{n:"Mangaladevi Temple", c:"temple", a:"Bolar, city centre", d:"The temple the city takes its name from, dedicated to the goddess Mangaladevi — said to date back to the 9th century under the Alupa dynasty.", w:"Mangaladevi Temple"},
+{n:"Kudroli Gokarnanatheshwara Temple", c:"temple", a:"Kudroli, central Mangalore", d:"A striking Shiva temple built in 1912 by social reformer Narayana Guru, famous for its gold-plated gopuram and a grand Navaratri light display.", w:"Kudroli Gokarnanatheshwara Temple"},
+{n:"Polali Rajarajeshwari Temple", c:"temple", a:"Polali, east of the city", d:"An ancient temple on the Phalguni river known for the biennial Aati Kalanja fair and its long, layered history predating written record.", w:"Polali Rajarajeshwari Temple"},
+{n:"Bappanadu Durgaparameshwari Temple", c:"temple", a:"Mulki, north of Mangalore", d:"A temple with an unusual founding legend involving a Muslim trader, reflecting the coast's long tradition of shared devotion across faiths.", w:"Bappanadu Durgaparameshwari Temple"},
+{n:"Someshwara Temple, Ullal", c:"temple", a:"On the rocks at Someshwara Beach", d:"A shore temple set directly on wave-cut rock, associated with Rani Abbakka, with the Arabian Sea as its permanent backdrop.", w:null},
+{n:"Sharavu Mahaganapathi Temple", c:"temple", a:"Car Street, city centre", d:"A busy Ganapathi temple in the old market quarter, a first stop for many locals before any new undertaking.", w:null},
+{n:"Venkataramana Temple, Kadri", c:"temple", a:"Kadri", d:"A Vaishnavite temple close to the Kadri temple complex, quieter than its famous neighbour.", w:null},
+{n:"Mahakali Temple, Bejai", c:"temple", a:"Bejai", d:"A neighbourhood temple to the goddess Kali, known locally for its Navaratri celebrations.", w:null},
+{n:"Anantheshwara Temple, Bolar", c:"temple", a:"Bolar", d:"An old Shiva temple near Mangaladevi, part of the cluster of temples that gave the Bolar–Bundar area its religious character.", w:null},
+{n:"Kadri Someshwara Temple", c:"temple", a:"Within the Kadri temple complex", d:"One of several shrines inside the wider Kadri hill complex, tucked behind the main Manjunatha temple.", w:null},
+{n:"Kannika Parameshwari Temple, Bunder", c:"temple", a:"Bunder, old port area", d:"A temple central to the Konkani trading community's history in Mangalore, near the historic harbour.", w:null},
+{n:"Shri Manjunatha Swamy Temple, Bondel", c:"temple", a:"Bondel", d:"A neighbourhood Shiva temple that anchors the residential Bondel locality.", w:null},
+
+// ---------------- CHURCHES ----------------
+{n:"St Aloysius Chapel", c:"church", a:"St Aloysius College, Lighthouse Hill", d:"A 19th-century chapel painted almost entirely, walls and ceiling, by the Italian Jesuit Antonio Moscheni — often compared to a miniature Sistine Chapel.", w:"St Aloysius Chapel, Mangalore"},
+{n:"Rosario Cathedral", c:"church", a:"Hampankatta, city centre", d:"The oldest Roman Catholic church in the region, known for its ornate interior, a carved wooden Madonna, and a dome that once guided fishermen home.", w:"Rosario Cathedral"},
+{n:"Milagres Church", c:"church", a:"Milagres, central Mangalore", d:"Founded in 1680 and dedicated to Our Lady of Miracles, one of the oldest churches on this coast, rebuilt after Tipu Sultan's forces destroyed the original.", w:"Milagres Church"},
+{n:"Infant Jesus Shrine, Jeppu", c:"church", a:"Jeppu", d:"A pilgrimage church devoted to the Infant Jesus, popular for its Thursday novenas.", w:null},
+{n:"St Sebastian Church, Bendoorwell", c:"church", a:"Bendoorwell", d:"A neighbourhood parish church known for its feast-day processions.", w:null},
+
+// ---------------- MOSQUES & DARGAHS ----------------
+{n:"Zeenath Baksh Jumma Masjid", c:"mosque", a:"Bunder, old port area", d:"One of the city's oldest mosques, with roots said to go back over a thousand years of coastal trade with Arabia.", w:"Zeenath Baksh Jumma Masjid"},
+{n:"Kudroli Jumma Masjid", c:"mosque", a:"Kudroli", d:"A well-known city mosque in the same busy Kudroli neighbourhood as the Gokarnanatheshwara temple.", w:null},
+{n:"Seyyid Madani Dargah, Ullal", c:"mosque", a:"Ullal", d:"A dargah commemorating Sufi saint Seyyid Muhammad Shareeful Madani, whose Urs festival draws large crowds once every few years.", w:null},
+
+// ---------------- NATURE & PARKS ----------------
+{n:"Pilikula Nisargadhama", c:"nature", a:"Vamanjoor, north-east Mangalore", d:"A sprawling eco-park with a zoo, botanical garden, lake, golf course, planetarium and a recreated heritage village — a full day out for families.", w:"Pilikula Nisargadhama"},
+{n:"Kadri Park", c:"nature", a:"Adjoining Kadri Hills", d:"A green city park with a small zoo enclosure and a musical fountain, popular for morning walks.", w:null},
+{n:"Sultan Battery", c:"nature", a:"Boloor, on the Netravathi estuary", d:"A watchtower built by Tipu Sultan to guard the river mouth, now a quiet riverside viewpoint at sunset.", w:"Sultan Battery, Mangalore"},
+{n:"Tagore Park", c:"nature", a:"Balmatta, city centre", d:"A small hilltop garden named for Rabindranath Tagore, with wide views over the rooftops of old Mangalore.", w:null},
+{n:"Someshwara Wildlife Sanctuary", c:"nature", a:"Foothills of the Western Ghats, east of the city", d:"Forested sanctuary in the Ghats' rain-shadow, good for a cooler day trip away from the coast.", w:"Someshwara Wildlife Sanctuary"},
+{n:"Netravathi Riverfront", c:"nature", a:"Along the Netravathi estuary", d:"The river that shapes the city's geography — best seen from Sultan Battery or a boat near the old port.", w:null},
+{n:"Pavanje River Mouth", c:"nature", a:"Near Sasihithlu", d:"Where the Pavanje meets the sea beside Sasihithlu beach — a good spot for birdwatching at low tide.", w:null},
+
+// ---------------- HERITAGE & LANDMARKS ----------------
+{n:"Pilikula Regional Science Centre", c:"heritage", a:"Inside Pilikula Nisargadhama", d:"A hands-on science museum and planetarium, part of the wider Pilikula park complex.", w:null},
+{n:"Bavutagudda WWII Watch Hill", c:"heritage", a:"Bavutagudda, city centre", d:"A hilltop once used to watch for wartime ships along the coast, now a residential high point with sea views.", w:null},
+{n:"New Mangalore Port Viewpoint", c:"heritage", a:"Panambur", d:"Karnataka's only major seaport — the working harbour and breakwater are visible from the beach road nearby.", w:"New Mangalore Port"},
+{n:"Kadri Caves", c:"heritage", a:"Behind Kadri Manjunatha Temple", d:"Rock-cut caves near the temple linked to the site's earlier history as a centre of Buddhist and Nath-yogi practice.", w:null},
+
+// ---------------- DAY TRIPS NEARBY ----------------
+{n:"St Mary's Islands", c:"excursion", a:"Off Malpe, ~60 km north", d:"A cluster of small islands famous for their hexagonal basalt rock columns, formed by cooling lava — reachable by boat from Malpe.", w:"St. Mary's Islands"},
+{n:"Malpe Beach", c:"excursion", a:"Near Udupi, ~58 km north", d:"A busy fishing harbour and beach that doubles as the jumping-off point for boats to St Mary's Islands.", w:"Malpe Beach"},
+{n:"Kapu Beach & Lighthouse", c:"excursion", a:"Near Udupi, ~50 km north", d:"A dramatic red-and-white lighthouse on a rocky headland, open to visitors for coastal views.", w:null},
+{n:"Dharmasthala", c:"excursion", a:"~75 km east, on the Netravathi", d:"A major pilgrimage town centred on the Manjunatheshwara temple, uniquely administered by a Jain family for Hindu worship — famed for feeding every visitor.", w:"Dharmasthala"},
+{n:"Kateel Durgaparameshwari Temple", c:"excursion", a:"~30 km north, on an island in the Nethravathi", d:"A temple built on a river island, one of the coast's most visited Durga shrines, known for its Yakshagana performances.", w:"Kateel"},
+{n:"Karkala Gomateshwara Statue", c:"excursion", a:"Karkala, ~40 km north-east", d:"A 42-foot monolithic statue of Bahubali atop a hill, carved in 1432 — one of several such statues across the region.", w:"Karkala Gommateshwara statue"},
+{n:"Moodabidri Thousand Pillar Basadi", c:"excursion", a:"Moodabidri, ~35 km north-east", d:"A grand 15th-century Jain basadi known locally as the 'Jain Kashi', with a forest of intricately carved stone pillars.", w:"Thousand Pillars temple, Moodabidri"},
+{n:"Kudremukh National Park", c:"excursion", a:"Western Ghats, ~95 km east", d:"Rolling green peaks and trekking trails in the Ghats' evergreen belt — a cooler, longer day trip from the coast.", w:"Kudremukh National Park"},
+];
+
+/* ---------------- STATE ---------------- */
+let activeCat = "all";
+let query = "";
+
+const grid = document.getElementById("grid");
+const emptyState = document.getElementById("emptyState");
+const pillsWrap = document.getElementById("filterPills");
+
+document.getElementById("statTotal").textContent = PLACES.length;
+document.getElementById("statCat").textContent = Object.keys(CATS).length;
+
+/* Placeholder gradient pairs per category (used until/if a real photo loads) */
+const PH = {
+  beach:["#1478A0","#0B4C63"], temple:["#C9A227","#8A6A16"], church:["#7C93A0","#4C6672"],
+  mosque:["#2E8B74","#1D5E4E"], nature:["#4F8B5F","#2E5A3B"], heritage:["#B1502A","#7A3418"],
+  excursion:["#A0713F","#6B4726"]
+};
+
+function buildPills(){
+  const all = document.createElement("button");
+  all.className = "pill active";
+  all.innerHTML = `<span class="dot" style="background:${'#12262A'}"></span> All places <span class="pill-count">${PLACES.length}</span>`;
+  all.onclick = () => setCat("all", all);
+  pillsWrap.appendChild(all);
+
+  Object.entries(CATS).forEach(([key, meta])=>{
+    const count = PLACES.filter(p=>p.c===key).length;
+    const btn = document.createElement("button");
+    btn.className = "pill";
+    btn.innerHTML = `<span class="dot" style="background:${meta.color}"></span> ${meta.label} <span class="pill-count">${count}</span>`;
+    btn.onclick = () => setCat(key, btn);
+    pillsWrap.appendChild(btn);
+  });
+}
+
+function setCat(key, el){
+  activeCat = key;
+  document.querySelectorAll(".pill").forEach(p=>p.classList.remove("active"));
+  el.classList.add("active");
+  render();
+}
+
+document.getElementById("heroSearch").addEventListener("input", (e)=>{
+  query = e.target.value.trim().toLowerCase();
+  render();
+});
+
+function mapQuery(p){
+  return encodeURIComponent(`${p.n}, ${p.a.replace(/~?\d+\s?km.*$/,'').trim()}, Karnataka, India`);
+}
+
+/* Cache resolved images so we don't refetch when re-rendering */
+const imgCache = {};
+
+async function loadWikiImage(title){
+  if(!title) return null;
+  if(imgCache[title] !== undefined) return imgCache[title];
+  try{
+    const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(title)}`);
+    if(!res.ok){ imgCache[title]=null; return null; }
+    const data = await res.json();
+    const src = (data.thumbnail && data.thumbnail.source) || (data.originalimage && data.originalimage.source) || null;
+    imgCache[title] = src;
+    return src;
+  }catch(e){
+    imgCache[title] = null;
+    return null;
+  }
+}
+
+function attachImage(mediaEl, place){
+  if(!place.w) return;
+  loadWikiImage(place.w).then(src=>{
+    if(!src) return;
+    const img = document.createElement("img");
+    img.src = src;
+    img.alt = place.n;
+    img.loading = "lazy";
+    img.onload = ()=> img.classList.add("loaded");
+    mediaEl.appendChild(img);
+  });
+}
+
+function card(place, idx){
+  const meta = CATS[place.c];
+  const [c1,c2] = PH[place.c];
+  const el = document.createElement("div");
+  el.className = "card";
+  el.style.setProperty("--ph1", c1);
+  el.style.setProperty("--ph2", c2);
+  el.style.setProperty("--cat-color", meta.color);
+  el.innerHTML = `
+    <div class="card-media">
+      <span class="ph-mono">${place.n.charAt(0)}</span>
+      <span class="ph-icon">${meta.icon} ${meta.label}</span>
+    </div>
+    <div class="card-body">
+      <div class="card-tag">${meta.label}</div>
+      <h3>${place.n}</h3>
+      <div class="card-area">${place.a}</div>
+      <div class="card-desc">${place.d}</div>
+      <div class="card-cta">View details &amp; map →</div>
+    </div>
+  `;
+  el.onclick = ()=> openModal(place);
+  attachImage(el.querySelector(".card-media"), place);
+  return el;
+}
+
+function render(){
+  grid.innerHTML = "";
+  const filtered = PLACES.filter(p=>{
+    const matchCat = activeCat==="all" || p.c===activeCat;
+    const matchQuery = !query || p.n.toLowerCase().includes(query) || p.a.toLowerCase().includes(query) || p.d.toLowerCase().includes(query);
+    return matchCat && matchQuery;
+  });
+  if(filtered.length===0){
+    emptyState.style.display = "block";
+  }else{
+    emptyState.style.display = "none";
+    filtered.forEach((p,i)=> grid.appendChild(card(p,i)));
+  }
+}
+
+/* ---------------- MODAL ---------------- */
+const overlay = document.getElementById("overlay");
+const modalBox = document.getElementById("modalBox");
+
+function openModal(place){
+  const meta = CATS[place.c];
+  const [c1,c2] = PH[place.c];
+  modalBox.style.setProperty("--ph1", c1);
+  modalBox.style.setProperty("--ph2", c2);
+  const q = mapQuery(place);
+  modalBox.innerHTML = `
+    <div class="modal-media">
+      <span class="ph-mono" style="font-size:64px;">${place.n.charAt(0)}</span>
+      <span class="modal-tag">${meta.icon} ${meta.label}</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <h2>${place.n}</h2>
+      <div class="modal-area">${place.a}</div>
+      <p class="modal-desc">${place.d}</p>
+      <div class="modal-map">
+        <iframe src="https://www.google.com/maps?q=${q}&output=embed" loading="lazy" allowfullscreen></iframe>
+      </div>
+      <div class="modal-actions">
+        <a class="btn btn-primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=${q}">Open in Google Maps</a>
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+      </div>
+    </div>
+  `;
+  attachImage(modalBox.querySelector(".modal-media"), place);
+  overlay.classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function closeModal(){
+  overlay.classList.remove("open");
+  document.body.style.overflow = "";
+}
+document.addEventListener("keydown", (e)=>{ if(e.key==="Escape") closeModal(); });
+
+/* ---------------- INIT ---------------- */
+buildPills();
+render();
+</script>
+</body>
+</html>

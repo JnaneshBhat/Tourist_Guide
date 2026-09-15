@@ -1,0 +1,17 @@
+{
+  "name": "mangalore-tourist-guide-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mangaluru tourist guide with the original frontend plus a Node.js/Express backend.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
